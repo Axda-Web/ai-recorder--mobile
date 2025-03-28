@@ -13,7 +13,8 @@ import { Link } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-// import { useSignUp } from "@clerk/clerk-expo";
+import { useSignUp } from "@clerk/clerk-expo";
+
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
@@ -23,7 +24,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
-  //   const { isLoaded, signUp, setActive } = useSignUp();
+  const { isLoaded, signUp, setActive } = useSignUp();
 
   const {
     control,
@@ -40,25 +41,25 @@ export default function RegisterScreen() {
   });
 
   const onSubmit = async (data: FormData) => {
-    // if (!isLoaded) return;
+    if (!isLoaded) return;
     setLoading(true);
 
     try {
-      //   const signUpAttempt = await signUp.create({
-      //     emailAddress: data.email,
-      //     password: data.password,
-      //     firstName: data.name,
-      //   });
-      //   if (signUpAttempt.status === "complete") {
-      // await setActive({ session: signUpAttempt.createdSessionId });
-      //   } else {
-      //     console.error(JSON.stringify(signUpAttempt, null, 2));
-      //     if (Platform.OS === "web") {
-      //       alert("Failed to sign in");
-      //     } else {
-      //       Alert.alert("Error", "Failed to sign in");
-      //     }
-      //   }
+      const signUpAttempt = await signUp.create({
+        emailAddress: data.email,
+        password: data.password,
+        firstName: data.name,
+      });
+      if (signUpAttempt.status === "complete") {
+        await setActive({ session: signUpAttempt.createdSessionId });
+      } else {
+        console.error(JSON.stringify(signUpAttempt, null, 2));
+        if (Platform.OS === "web") {
+          alert("Failed to sign in");
+        } else {
+          Alert.alert("Error", "Failed to sign in");
+        }
+      }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
       if (Platform.OS === "web") {

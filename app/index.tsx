@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-// import { useOAuth, useSignIn } from "@clerk/clerk-expo";
+import { useOAuth, useSignIn } from "@clerk/clerk-expo";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,9 +24,9 @@ type FormData = z.infer<typeof schema>;
 
 export default function Index() {
   const [loading, setLoading] = useState(false);
-  // const { startOAuthFlow: googleAuth } = useOAuth({ strategy: "oauth_google" });
-  // const { startOAuthFlow: appleAuth } = useOAuth({ strategy: "oauth_apple" });
-  // const { signIn, setActive, isLoaded } = useSignIn();
+  const { startOAuthFlow: googleAuth } = useOAuth({ strategy: "oauth_google" });
+  const { startOAuthFlow: appleAuth } = useOAuth({ strategy: "oauth_apple" });
+  const { signIn, setActive, isLoaded } = useSignIn();
 
   const {
     control,
@@ -42,24 +42,24 @@ export default function Index() {
   });
 
   const onSubmit = async (data: FormData) => {
-    // if (!isLoaded) return;
+    if (!isLoaded) return;
 
     setLoading(true);
     try {
-      // const signInAttempt = await signIn.create({
-      //   identifier: data.email,
-      //   password: data.password,
-      // });
-      // console.log("signInAttempt", signInAttempt);
-      // if (signInAttempt.status === "complete") {
-      //   await setActive({ session: signInAttempt.createdSessionId });
-      // } else {
-      //   if (Platform.OS === "web") {
-      //     alert("Failed to sign in");
-      //   } else {
-      //     Alert.alert("Error", "Failed to sign in");
-      //   }
-      // }
+      const signInAttempt = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
+      console.log("signInAttempt", signInAttempt);
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+      } else {
+        if (Platform.OS === "web") {
+          alert("Failed to sign in");
+        } else {
+          Alert.alert("Error", "Failed to sign in");
+        }
+      }
     } catch (err) {
       if (Platform.OS === "web") {
         alert("Failed to sign in");
@@ -75,10 +75,10 @@ export default function Index() {
     console.log("Sign in with Apple");
 
     try {
-      // const { createdSessionId, setActive } = await appleAuth();
-      // if (createdSessionId) {
-      //   setActive!({ session: createdSessionId });
-      // }
+      const { createdSessionId, setActive } = await appleAuth();
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+      }
     } catch (err) {
       console.error("OAuth error", err);
     }
@@ -87,10 +87,10 @@ export default function Index() {
   const handleSignInWithGoogle = async () => {
     console.log("Sign in with Google");
     try {
-      // const { createdSessionId, setActive } = await googleAuth();
-      // if (createdSessionId) {
-      //   setActive!({ session: createdSessionId });
-      // }
+      const { createdSessionId, setActive } = await googleAuth();
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+      }
     } catch (err) {
       console.error("OAuth error", err);
     }
