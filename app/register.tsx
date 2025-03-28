@@ -35,7 +35,7 @@ export default function RegisterScreen() {
     defaultValues: {
       email: "simon@galaxies.dev",
       password: "Test12345",
-      name: "Simon",
+      // name: "Simon",
     },
     mode: "onChange",
   });
@@ -48,7 +48,7 @@ export default function RegisterScreen() {
       const signUpAttempt = await signUp.create({
         emailAddress: data.email,
         password: data.password,
-        firstName: data.name,
+        // firstName: data.name,
       });
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
