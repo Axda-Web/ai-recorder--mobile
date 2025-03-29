@@ -1,57 +1,57 @@
 import { useEffect, useState } from "react";
 import { View, Text, Alert, TouchableOpacity, FlatList } from "react-native";
-// import {
-//   RecordingPresets,
-//   RecorderState,
-//   useAudioRecorder,
-//   AudioModule,
-// } from "expo-audio";
+import {
+  RecordingPresets,
+  RecorderState,
+  useAudioRecorder,
+  AudioModule,
+} from "expo-audio";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-// import { useNotes } from "@/providers/NoteProvider";
+import { useNotes } from "@/providers/NoteProvider";
 // import { NoteCard } from "@/components/NoteCard";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 const Page = () => {
-  //   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const [isRecording, setIsRecording] = useState(false);
   const router = useRouter();
   //   const { notes } = useNotes();
 
   async function startRecording() {
     try {
-      //   const permissionResponse =
-      //     await AudioModule.requestRecordingPermissionsAsync();
-      //   console.log(
-      //     "🚀 ~ startRecording ~ permissionResponse:",
-      //     permissionResponse
-      //   );
-      //   if (permissionResponse.status === "granted") {
-      //     console.log("Permission granted");
-      //   } else {
-      //     Alert.alert("Permission not granted");
-      //   }
-      //   await AudioModule.setAudioModeAsync({
-      //     allowsRecording: true,
-      //     playsInSilentMode: true,
-      //   });
-      //   await audioRecorder.prepareToRecordAsync();
-      //   audioRecorder.record();
-      //   setIsRecording(true);
+      const permissionResponse =
+        await AudioModule.requestRecordingPermissionsAsync();
+      console.log(
+        "🚀 ~ startRecording ~ permissionResponse:",
+        permissionResponse
+      );
+      if (permissionResponse.status === "granted") {
+        console.log("Permission granted");
+      } else {
+        Alert.alert("Permission not granted");
+      }
+      await AudioModule.setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
+      });
+      await audioRecorder.prepareToRecordAsync();
+      audioRecorder.record();
+      setIsRecording(true);
     } catch (err) {
       console.error("Failed to start recording", err);
     }
   }
 
   async function stopRecording() {
-    // if (!audioRecorder.isRecording) return;
-    // setIsRecording(false);
-    // await audioRecorder.stop();
-    // const uri = audioRecorder.uri;
-    // if (!uri) {
-    //   console.error("Failed to get URI for recording");
-    //   return;
-    // }
+    if (!audioRecorder.isRecording) return;
+    setIsRecording(false);
+    await audioRecorder.stop();
+    const uri = audioRecorder.uri;
+    if (!uri) {
+      console.error("Failed to get URI for recording");
+      return;
+    }
     // router.push(`/new-recording?uri=${encodeURIComponent(uri)}`);
   }
 
